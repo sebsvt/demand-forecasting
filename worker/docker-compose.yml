@@ -4,9 +4,6 @@ services:
   app:
     build: .
     container_name: my_python_app
-    depends_on:
-      - rabbitmq
-      - mongo
     environment:
       RABBITMQ_HOST: rabbitmq
       RABBITMQ_USERNAME: ${RABBITMQ_USERNAME}

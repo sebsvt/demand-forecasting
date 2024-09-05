@@ -1,21 +1,17 @@
-# Use the official Python image from the Docker Hub
-FROM python:3.11-slim
+FROM python:3.11
 
-# Set the working directory in the container
+# Install dependencies
+RUN pip install pandas pika pymongo python-dotenv
+
+# Install prophet
+RUN pip install prophet
+
+# Patch prophet package
+RUN sed -i 's/np.float_/np.float64/g' /usr/local/lib/python3.11/site-packages/prophet/forecaster.py
+
+# Copy your application code
+COPY . /app
+
 WORKDIR /app
 
-# Copy the requirements file into the container at /app
-COPY requirements.txt .
-
-# Install any needed packages specified in requirements.txt
-RUN pip install --no-cache-dir -r requirements.txt
-
-# Copy the rest of the application code into the container
-COPY . .
-
-# Define environment variable
-ENV PYTHONUNBUFFERED=1
-
-# Run the command to start the application
 CMD ["python", "worker.py"]
-
